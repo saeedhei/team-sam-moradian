@@ -36,21 +36,73 @@ The project follows a standard Next.js structure augmented with specific directo
 ```text
 lms-project/
 ├── .env.local
-├── node_modules/
+├── .gitignore
+├── docker-compose.yml
+├── next.config.js
 ├── package.json
-├── **app/** (Next.js App Router for frontend components and pages)
-├── **src/** (Core logic, hooks, utilities)
-├── **database/** (CouchDB configuration and initial data scripts)
-├── **api/**
-│ ├── **graphql/** (Schema definitions, resolvers, etc.)
-│ ├── **rest/** (Rest API route handlers)
-│ └── **trpc/** (tRPC router and context setup)
-├── **docker-compose.yml**
-├── **README.md** (This file)
+├── tsconfig.json
+│
+├── **src/**                               # Core backend + shared logic
+│   ├── **app/**                           # Next.js UI + routing (frontend)
+│   │   ├── (public)/
+│   │   ├── (dashboard)/
+│   │   │   └── admin/
+│   │   │       ├── page.tsx
+│   │   │       └── layout.tsx
+│   │   ├── api/                           # REST endpoints (auto-generated)
+│   │   ├── graphql/                       # GraphQL handler (auto-generated)
+│   │   ├── trpc/                          # TRPC handler + router
+│   │   ├── layout.tsx
+│   │   └── page.tsx
+│   │
+│   ├── **models/**                        # ⭐ SSOT (source of truth)
+│   │   ├── user.model.ts
+│   │   ├── course.model.ts
+│   │   ├── lesson.model.ts
+│   │   └── index.ts                       # exports models
+│   │
+│   ├── **generated/**                     # ⚠️ AUTO-GENERATED — DO NOT EDIT
+│   │   ├── types.ts                       # TS types from models
+│   │   ├── schemas.ts                     # Zod schemas
+│   │   ├── couch/                         # CouchDB adapters per model
+│   │   ├── rest/                          # REST CRUD handlers
+│   │   ├── graphql/                       # SDL + Resolvers
+│   │   ├── trpc/                          # Routers + procedures
+│   │   └── ui/                            # Auto UI forms (optional)
+│   │
+│   ├── **lib/**
+│   │   ├── couch.ts                       # nano client wrapper
+│   │   ├── auth.ts                        # JWT/Session + RBAC
+│   │   ├── validations.ts
+│   │   └── codegen.ts                     # runtime/cli codegen engine
+│   │
+│   ├── **services/**                      # Business logic layer
+│   │   ├── search.ts
+│   │   └── mailer.ts
+│   │
+│   ├── **components/**                    # Shared React components
+│   │   ├── forms/
+│   │   └── ui/
+│   │
+│   ├── **utils/**                         # Small helpers
+│   ├── **types/**                         # global TS types
+│   └── **scripts/**
+│       └── gen.ts                         # CLI → `npm run gen`
+│
+├── **database/**
+│   ├── config.json                        # CouchDB URLs & settings
+│   ├── init.js                            # init + migrations
+│   └── seed/                              # initial documents
+│
+├── **api/**                               # (Optional unified API layer)
+│   ├── graphql/
+│   ├── rest/
+│   └── trpc/
+│
 └── **docs/**
-├── **setup.md**
-├── **architecture.md**
-└── **auth-system.md**
+    ├── architecture.md
+    ├── setup.md
+    └── auth-system.md
 ```
 
 ---
