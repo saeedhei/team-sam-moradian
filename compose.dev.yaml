@@ -5,15 +5,26 @@ services:
       context: .
       dockerfile: dev.Dockerfile
     environment:
-      - NODE_ENV=development      
+      - NODE_ENV=development
     volumes:
       - ./:/app
       - /app/node_modules
-    restart: always   
+      - pnpm-store:/pnpm/store # ← persistent global pnpm store (fast & stable)
+    restart: unless-stopped
     ports:
-      - "3000:3000"
+      - '3000:3000'
+    # develop:
+    #   watch:
+    #     - action: sync
+    #       path: .
+    #       target: /app
+    #       ignore:
+    #         - node_modules/
+    #         - .next/
+    #     - action: rebuild
+    #       path: package.json
     networks:
-      - next_network     
+      - next_network
 
   couchdb:
     container_name: next-couchdb
@@ -22,7 +33,7 @@ services:
       - COUCHDB_USER=admin
       - COUCHDB_PASSWORD=securepassword123
     ports:
-      - "5984:5984"
+      - '5984:5984'
     volumes:
       - couchdb_data:/opt/couchdb/data
     restart: always
@@ -34,4 +45,5 @@ networks:
     driver: bridge
 
 volumes:
-  couchdb_data:    
+  couchdb_data:
+  pnpm-store: # survives container rebuilds and code changes
