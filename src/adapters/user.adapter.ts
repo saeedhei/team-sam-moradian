@@ -12,4 +12,7 @@ export const userAdapter = {
   deleteUser: async (id: string) => {
     return await userService.removeUser(id);
   },
+  getStats: async () => {
+    return await userService.getStats();
+  },
 };

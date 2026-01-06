@@ -18,4 +18,8 @@ export const userRouter = router({
   delete: publicProcedure.input(z.string()).mutation(async ({ input }) => {
     return await userAdapter.deleteUser(input);
   }),
+
+  getStats: publicProcedure.query(async () => {
+    return await userAdapter.getStats();
+  }),
 });

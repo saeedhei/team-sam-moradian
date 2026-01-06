@@ -32,4 +32,8 @@ export const userService = {
   async getAllUsers() {
     return await userRepository.findAll();
   },
+  async getStats() {
+    const count = await userRepository.countUsers();
+    return { totalUsers: count };
+  },
 };
