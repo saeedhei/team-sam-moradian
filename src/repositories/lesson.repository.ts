@@ -1,24 +1,23 @@
+// src/repositories/lesson.repository.ts
 import { getDb } from '@/lib/db/couch';
-import type { Lesson } from '@/generated/types';
 
 export const lessonRepository = {
-  async findById(id: string): Promise<Lesson | null> {
-    const db = getDb();
+  async findById(id: string) {
+    const db = await getDb(); // <--- ADD AWAIT
     try {
-      const doc = await db.get(id);
-      return doc as unknown as Lesson;
+      return await db.get(id);
     } catch (e) {
       return null;
     }
   },
 
-  async create(lesson: Omit<Lesson, '_id' | '_rev'>) {
-    const db = getDb();
+  async create(lesson: any) {
+    const db = await getDb(); // <--- ADD AWAIT
     return await db.insert(lesson);
   },
 
   async delete(id: string, rev: string) {
-    const db = getDb();
+    const db = await getDb(); // <--- ADD AWAIT
     return await db.destroy(id, rev);
   },
 };

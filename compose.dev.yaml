@@ -4,28 +4,21 @@ services:
     build:
       context: .
       dockerfile: dev.Dockerfile
+    env_file:
+      - .env # Load environment variables from .env file
     environment:
       - NODE_ENV=development
+      - COUCHDB_URL=http://admin:securepassword123@next-couchdb:5984
+      - COUCHDB_DB=next_database
     volumes:
       - ./:/app
       - /app/node_modules
-      - pnpm-store:/pnpm/store # ← persistent global pnpm store (fast & stable)
+      - pnpm-store:/pnpm/store
     restart: unless-stopped
     ports:
       - '3000:3000'
-    # develop:
-    #   watch:
-    #     - action: sync
-    #       path: .
-    #       target: /app
-    #       ignore:
-    #         - node_modules/
-    #         - .next/
-    #     - action: rebuild
-    #       path: package.json
     networks:
       - next_network
-
   couchdb:
     container_name: next-couchdb
     image: couchdb:3.4.2

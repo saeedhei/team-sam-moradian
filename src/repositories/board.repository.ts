@@ -1,24 +1,23 @@
+// src/repositories/board.repository.ts
 import { getDb } from '@/lib/db/couch';
-import type { Board } from '@/generated/types';
 
 export const boardRepository = {
-  async findById(id: string): Promise<Board | null> {
-    const db = getDb();
+  async findById(id: string) {
+    const db = await getDb(); // <--- ADD AWAIT
     try {
-      const doc = await db.get(id);
-      return doc as unknown as Board;
+      return await db.get(id);
     } catch (e) {
       return null;
     }
   },
 
-  async create(board: Omit<Board, '_id' | '_rev'>) {
-    const db = getDb();
+  async create(board: any) {
+    const db = await getDb(); // <--- ADD AWAIT
     return await db.insert(board);
   },
 
   async delete(id: string, rev: string) {
-    const db = getDb();
+    const db = await getDb(); // <--- ADD AWAIT
     return await db.destroy(id, rev);
   },
 };
