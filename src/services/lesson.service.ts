@@ -23,4 +23,8 @@ export const lessonService = {
     if (!lesson) throw new Error('LESSON_NOT_FOUND');
     return await lessonRepository.delete(id, lesson._rev!);
   },
+  async getStats() {
+    const count = await lessonRepository.count(); // Ensure count() exists in lesson repo
+    return { totalLessons: count };
+  },
 };

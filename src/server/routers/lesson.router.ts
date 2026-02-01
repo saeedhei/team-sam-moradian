@@ -22,4 +22,7 @@ export const lessonRouter = router({
   delete: publicProcedure.input(z.string()).mutation(async ({ input }) => {
     return await lessonAdapter.deleteLesson(input);
   }),
+  getStats: publicProcedure.query(async () => {
+    return await lessonAdapter.getStats();
+  }),
 });

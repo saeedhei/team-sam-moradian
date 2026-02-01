@@ -13,4 +13,7 @@ export const lessonAdapter = {
   deleteLesson: async (id: string) => {
     return await lessonService.removeLesson(id);
   },
+  getStats: async () => {
+    return await lessonService.getStats();
+  },
 };

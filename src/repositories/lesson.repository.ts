@@ -40,4 +40,12 @@ export const lessonRepository = {
     const db = getDb();
     return await db.destroy(id, rev);
   },
+  async count(): Promise<number> {
+    const db = getDb();
+    const response = await db.find({
+      selector: { type: 'lesson' }, // MUST be 'lesson'
+      fields: ['_id'],
+    });
+    return response.docs.length;
+  },
 };
