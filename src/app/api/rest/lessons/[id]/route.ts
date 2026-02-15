@@ -1,13 +1,23 @@
 import { lessonAdapter } from '@/adapters/lesson.adapter';
 import { NextResponse } from 'next/server';
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
-  try {
-    const lesson = await lessonAdapter.get(params.id);
-    if (!lesson) return NextResponse.json({ error: 'Not Found' }, { status: 404 });
+type RouteParams = { params: Promise<{ id: string }> };
 
-    return NextResponse.json(lesson);
-  } catch (error) {
-    return NextResponse.json({ error: 'Internal Error' }, { status: 500 });
-  }
+export async function GET(req: Request, { params }: RouteParams) {
+  const { id } = await params;
+  const data = await lessonAdapter.get(id);
+  return NextResponse.json(data);
+}
+
+export async function PATCH(req: Request, { params }: RouteParams) {
+  const { id } = await params;
+  const body = await req.json();
+  const result = await lessonAdapter.update(id, body);
+  return NextResponse.json(result);
+}
+
+export async function DELETE(req: Request, { params }: RouteParams) {
+  const { id } = await params;
+  await lessonAdapter.delete(id);
+  return NextResponse.json({ ok: true });
 }

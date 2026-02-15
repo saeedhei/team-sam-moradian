@@ -1,15 +1,14 @@
-<<<<<<< HEAD
 import { userAdapter } from '@/adapters/user.adapter';
 import { NextResponse } from 'next/server';
 
 export async function GET() {
-  try {
-    const users = await userAdapter.listUsers();
-    return NextResponse.json(users);
-  } catch (error) {
-    return NextResponse.json({ error: 'Failed to fetch users' }, { status: 500 });
-  }
+  const users = await userAdapter.list();
+  return NextResponse.json(users);
 }
-=======
-// src/app/api/rest/users/route.ts
->>>>>>> upstream/main
+
+export async function POST(req: Request) {
+  const body = await req.json();
+  const result = await userAdapter.create(body);
+  // CouchDB returns { ok: true, id: "...", rev: "..." }
+  return NextResponse.json(result);
+}
